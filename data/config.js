@@ -9,7 +9,7 @@ const fetchData = async(league, start, end, options)=> {
     
 }
 
-async function getCheerioData(loadFile, data, year){
+async function getCheerioData(loadFile, data, year, contry){
 
     let $ = await cheerio.load(loadFile)
             
@@ -33,6 +33,7 @@ async function getCheerioData(loadFile, data, year){
                 hscore,
                 ascore,
                 year,
+                contry,
                 day
             })
             
@@ -51,7 +52,7 @@ async function getHandler(league,start, end, options){
         let res = await fetch(`https://www.transfermarkt.fr/${league}/gesamtspielplan/wettbewerb/${options.code}/saison_id/${year}`)
         let html = await res.text()
 
-        data = await getCheerioData(html, data, year)
+        data = await getCheerioData(html, data, year, options.country)
 
         console.log(data)
     }
@@ -65,7 +66,7 @@ async function getHandler(league,start, end, options){
             let res = await fetch(`https://www.transfermarkt.fr/${league}/gesamtspielplan/wettbewerb/${options.code}/saison_id/${year}`)
             let html = await res.text()
 
-            data = await getCheerioData(html, newData, year)
+            data = await getCheerioData(html, newData, year, options.country)
         }
         await appendExtendData(data, league)
     }
